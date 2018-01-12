@@ -1,3 +1,4 @@
+from datetime import datetime
 import math
 from os import path, listdir
 
@@ -45,7 +46,10 @@ orig_ax.imshow(orig_image, cmap=plt.cm.Greys_r)
 sinogram_ax.set_title("Sinogram")
 
 theta = np.linspace(0., scan_range, no_of_scans, endpoint=False)
+before = datetime.now()
 sinogram = radon(orig_image, theta=theta, circle=True)
+time = datetime.now() - before
+print(f"Generating sinogram took {time.total_seconds()} seconds.")
 sinogram_ax.set_title("Radon transform\n(Sinogram)")
 sinogram_ax.set_xlabel("Projection angle (deg)")
 sinogram_ax.set_ylabel("Projection position (pixels)")
@@ -57,6 +61,7 @@ sinogram_ax.imshow(
 )
 
 restored_ax.set_title("Restored")
+before = datetime.now()
 restored_image = iradon(
     sinogram,
     theta=theta,
@@ -64,6 +69,8 @@ restored_image = iradon(
     filter="ramp" if filtering else None,
     output_size=no_of_detectors,
 )
+time = datetime.now() - before
+print(f"Restoring image took {time.total_seconds()} seconds.")
 restored_ax.imshow(
     rescale(restored_image, 100 / restored_image.shape[0]),
     cmap=plt.cm.Greys_r,
