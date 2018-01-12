@@ -64,7 +64,10 @@ restored_image = iradon(
     filter="ramp" if filtering else None,
     output_size=no_of_detectors,
 )
-restored_ax.imshow(rescale(restored_image, 100 / restored_image.shape[0]), cmap=plt.cm.Greys_r)
+restored_ax.imshow(
+    rescale(restored_image, 100 / restored_image.shape[0]),
+    cmap=plt.cm.Greys_r,
+)
 
 scale = restored_image.shape[0] / orig_image.shape[0]
 
